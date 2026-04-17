@@ -9,7 +9,8 @@ public class Organizador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "usuario_id")
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     private String descricao;

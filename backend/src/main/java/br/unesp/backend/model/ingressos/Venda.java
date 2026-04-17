@@ -33,7 +33,8 @@ public class Venda {
     @JoinColumn(name = "cupom_desconto_id")
     private CupomDesconto cupomDesconto;
 
-    @OneToOne(mappedBy = "pagamento_id")
+    @OneToOne
+    @JoinColumn(name = "pagamento_id")
     private Pagamento pagamento;
 
     public Venda() {
