@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: eventos-api
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    url: ${DATASOURCE_URL}
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    out-of-order: false
+    baseline-version: 0
+    baseline-description: Baseline for existing database
+
+  web:
+    error:
+      include-stacktrace: never
