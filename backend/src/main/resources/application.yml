@@ -24,3 +24,8 @@ spring:
   web:
     error:
       include-stacktrace: never
+
+api:
+  security:
+    token:
+        secret: ${JWT_SECRET:my-secret-key}

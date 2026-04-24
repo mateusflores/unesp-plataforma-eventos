@@ -1,6 +1,6 @@
 package br.unesp.backend.dto.endereco;
 
-import br.unesp.backend.enums.UnidadeFederativa;
+import br.unesp.backend.model.enums.UnidadeFederativa;
 
 public record EnderecoSummary(
         Long id,

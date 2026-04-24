@@ -1,6 +1,6 @@
 package br.unesp.backend.model.ingressos;
 
-import br.unesp.backend.enums.StatusIngresso;
+import br.unesp.backend.model.enums.StatusIngresso;
 import br.unesp.backend.model.Usuario;
 import jakarta.persistence.*;
 

@@ -1,7 +1,7 @@
 package br.unesp.backend.model.ingressos;
 
-import br.unesp.backend.enums.MetodoPagamento;
-import br.unesp.backend.enums.StatusPagamento;
+import br.unesp.backend.model.enums.MetodoPagamento;
+import br.unesp.backend.model.enums.StatusPagamento;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

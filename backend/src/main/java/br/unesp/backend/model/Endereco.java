@@ -1,6 +1,6 @@
 package br.unesp.backend.model;
 
-import br.unesp.backend.enums.UnidadeFederativa;
+import br.unesp.backend.model.enums.UnidadeFederativa;
 import jakarta.persistence.*;
 
 @Entity

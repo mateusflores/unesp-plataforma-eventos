@@ -1,6 +1,6 @@
 package br.unesp.backend.model.ingressos;
 
-import br.unesp.backend.enums.TipoDesconto;
+import br.unesp.backend.model.enums.TipoDesconto;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

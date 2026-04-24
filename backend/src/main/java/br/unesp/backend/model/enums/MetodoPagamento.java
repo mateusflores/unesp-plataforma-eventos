@@ -1,4 +1,4 @@
-package br.unesp.backend.enums;
+package br.unesp.backend.model.enums;
 
 public enum MetodoPagamento {
     PIX,
