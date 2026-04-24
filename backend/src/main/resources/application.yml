@@ -5,7 +5,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    open-in-view: false
+    open-in-view: true
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -14,7 +14,7 @@ spring:
     url: ${DATASOURCE_URL}
 
   flyway:
-    enabled: true
+    enabled: false
     baseline-on-migrate: false
     validate-on-migrate: true
     out-of-order: false

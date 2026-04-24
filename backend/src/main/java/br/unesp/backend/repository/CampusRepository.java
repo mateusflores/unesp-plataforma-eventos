@@ -12,5 +12,4 @@ public interface CampusRepository extends JpaRepository<Campus, Long> {
     List<Campus> findByUniversidadeId(Long universidadeId);
 
     boolean existsByUniversidadeAndNome(Long universidadeId, String nome);
-
 }

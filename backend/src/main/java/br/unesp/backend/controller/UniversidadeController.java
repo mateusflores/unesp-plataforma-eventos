@@ -1,5 +1,7 @@
 package br.unesp.backend.controller;
 
+import br.unesp.backend.dto.universidade.UniversidadeRequest;
+import br.unesp.backend.dto.universidade.UniversidadeSummary;
 import br.unesp.backend.model.Universidade;
 import br.unesp.backend.service.UniversidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,25 +22,24 @@ public class UniversidadeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Universidade>> findAll() {
+    public ResponseEntity<List<UniversidadeSummary>> findAll() {
         return ResponseEntity.ok(universidadeService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Universidade> findById(@PathVariable Long id) {
+    public ResponseEntity<UniversidadeSummary> findById(@PathVariable Long id) {
         return ResponseEntity.ok(universidadeService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Universidade> create(@RequestBody Universidade universidade) {
-        Universidade criada = universidadeService.save(universidade);
-        return ResponseEntity.status(201).body(criada);
+    public ResponseEntity<UniversidadeSummary> create(@RequestBody UniversidadeRequest request) {
+        UniversidadeSummary summary = universidadeService.save(request);
+        return ResponseEntity.status(201).body(summary);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Universidade> update(@PathVariable Long id, @RequestBody Universidade universidade) {
-        universidade.setId(id);
-        return ResponseEntity.ok(universidadeService.save(universidade));
+    public ResponseEntity<UniversidadeSummary> update(@PathVariable Long id, @RequestBody UniversidadeRequest request) {
+        return ResponseEntity.ok(universidadeService.update(id, request));
     }
 
     @DeleteMapping("/{id}")

@@ -15,6 +15,10 @@ public class Campus {
     @JoinColumn(name = "universidade_id")
     private Universidade universidade;
 
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id")
+    private Endereco endereco;
+
     public Campus() {
     }
 
@@ -40,5 +44,13 @@ public class Campus {
 
     public void setUniversidade(Universidade universidade) {
         this.universidade = universidade;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }
