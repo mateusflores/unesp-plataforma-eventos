@@ -39,6 +39,11 @@ public class EventoSpecification {
                 predicates.add(cb.equal(root.get("gratuito"), gratuito));
             }
             if (status != null) {
+                try {
+                    br.unesp.backend.model.enums.StatusEvento.valueOf(status);
+                } catch (IllegalArgumentException e) {
+                    return cb.disjunction();
+                }
                 predicates.add(cb.equal(root.get("status").as(String.class), status));
             }
             if (organizadorId != null) {

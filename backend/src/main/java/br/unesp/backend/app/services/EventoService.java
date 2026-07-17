@@ -54,6 +54,10 @@ public class EventoService {
     public Page<Evento> listar(String busca, Long universidadeId, Long campusId,
                                List<Long> categoriaIds, Boolean gratuito, String status,
                                Long organizadorId, Boolean somenteDestaque, int pagina, int porPagina) {
+        if (pagina < 1) pagina = 1;
+        if (porPagina < 1) porPagina = 9;
+        if (porPagina > 100) porPagina = 100;
+
         var spec = EventoSpecification.comFiltros(busca, universidadeId, campusId,
                 categoriaIds, gratuito, status, organizadorId, somenteDestaque);
         return eventoRepository.findAll(spec, PageRequest.of(pagina - 1, porPagina));

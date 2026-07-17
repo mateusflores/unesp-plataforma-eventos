@@ -28,6 +28,7 @@ public class CompraService {
     private final IngressoRepository ingressoRepository;
     private final LoteRepository loteRepository;
     private final CupomDescontoRepository cupomRepository;
+    private final CupomService cupomService;
 
     public CompraService(VendaRepository vendaRepository,
                          ItemVendaRepository itemVendaRepository,
@@ -37,7 +38,8 @@ public class CompraService {
                          EventoRepository eventoRepository,
                          IngressoRepository ingressoRepository,
                          LoteRepository loteRepository,
-                         CupomDescontoRepository cupomRepository) {
+                         CupomDescontoRepository cupomRepository,
+                         CupomService cupomService) {
         this.vendaRepository = vendaRepository;
         this.itemVendaRepository = itemVendaRepository;
         this.pagamentoRepository = pagamentoRepository;
@@ -47,6 +49,7 @@ public class CompraService {
         this.ingressoRepository = ingressoRepository;
         this.loteRepository = loteRepository;
         this.cupomRepository = cupomRepository;
+        this.cupomService = cupomService;
     }
 
     @Transactional
@@ -109,18 +112,7 @@ public class CompraService {
 
         CupomDesconto cupom = null;
         if (request.cupomCodigo() != null && !request.cupomCodigo().isBlank()) {
-            cupom = cupomRepository.findByCodigo(request.cupomCodigo())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cupom não encontrado"));
-
-            if (!Boolean.TRUE.equals(cupom.getAtivo())) {
-                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Cupom inativo");
-            }
-            if (cupom.getValidade() != null && cupom.getValidade().isBefore(ZonedDateTime.now())) {
-                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Cupom expirado");
-            }
-            if (cupom.getQuantidadeMaxima() != null && cupom.getQuantidadeUsada() >= cupom.getQuantidadeMaxima()) {
-                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Cupom esgotado");
-            }
+            cupom = cupomService.validar(request.cupomCodigo(), request.eventoId());
 
             if (cupom.getTipoDesconto() == TipoDesconto.PERCENTUAL) {
                 desconto = valorTotal.multiply(cupom.getValor()).divide(BigDecimal.valueOf(100));
