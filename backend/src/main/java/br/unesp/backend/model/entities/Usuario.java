@@ -2,9 +2,7 @@ package br.unesp.backend.model.entities;
 
 import br.unesp.backend.model.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,9 +40,21 @@ public class Usuario implements UserDetails {
     @Column(name = "user_role")
     private UserRole userRole;
 
+    private String avatarCor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "universidade_id")
+    private Universidade universidade;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "campus_id")
+    private Campus campus;
+
+    private String curso;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(() -> "ROLE_" + userRole.name());
     }
 
     @Override

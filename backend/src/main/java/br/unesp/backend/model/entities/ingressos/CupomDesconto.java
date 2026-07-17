@@ -1,11 +1,9 @@
 package br.unesp.backend.model.entities.ingressos;
 
 import br.unesp.backend.model.enums.TipoDesconto;
+import br.unesp.backend.model.entities.Evento;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -37,5 +35,11 @@ public class CupomDesconto {
     private Integer quantidadeUsada = 0;
 
     private ZonedDateTime validade;
+
+    private Boolean ativo = Boolean.TRUE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "evento_id")
+    private Evento evento;
 
 }

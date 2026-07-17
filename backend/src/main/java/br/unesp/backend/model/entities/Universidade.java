@@ -23,6 +23,10 @@ public class Universidade {
     @Column(nullable = false)
     private String nome;
 
+    private String sigla;
+
+    private String logoCor;
+
     @OneToMany(mappedBy = "universidade")
     private List<Campus> listaCampus;
 

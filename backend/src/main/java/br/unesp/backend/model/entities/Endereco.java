@@ -16,6 +16,8 @@ public class Endereco {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String logradouro;
+
     private String cep;
 
     private String cidade;

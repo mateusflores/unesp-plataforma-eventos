@@ -1,11 +1,10 @@
 package br.unesp.backend.model.entities.ingressos;
 
+import br.unesp.backend.model.entities.Evento;
+import br.unesp.backend.model.entities.Usuario;
 import br.unesp.backend.model.enums.StatusVenda;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -32,6 +31,14 @@ public class Venda {
     @Enumerated(EnumType.STRING)
     private StatusVenda status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "evento_id", nullable = false)
+    private Evento evento;
+
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL,
             orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ItemVenda> itemVendaList;
@@ -40,7 +47,7 @@ public class Venda {
     @JoinColumn(name = "cupom_desconto_id")
     private CupomDesconto cupomDesconto;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pagamento_id")
     private Pagamento pagamento;
 
