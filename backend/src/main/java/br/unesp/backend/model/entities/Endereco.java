@@ -7,6 +7,8 @@ import lombok.*;
 @Entity
 @Table(name = "endereco")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Endereco {
 

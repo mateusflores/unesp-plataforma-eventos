@@ -11,8 +11,6 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
-    List<Usuario> findByEmail(String email);
-
     boolean existsByEmail(String email);
 
     List<Usuario> findByUserRole(UserRole userRole);
@@ -20,8 +18,5 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     boolean existsByNome(String nome);
 
     List<Usuario> findByIsAtivoTrue();
-
-    @Query("SELECT u FROM Usuario u WHERE u.login = ?1")
-    Usuario findByLogin(String login);
 
 }

@@ -8,6 +8,8 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "eventos")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Evento {
 
     @Id

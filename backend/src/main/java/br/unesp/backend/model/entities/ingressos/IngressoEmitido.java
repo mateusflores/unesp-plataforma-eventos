@@ -3,14 +3,18 @@ package br.unesp.backend.model.entities.ingressos;
 import br.unesp.backend.model.enums.StatusIngresso;
 import br.unesp.backend.model.entities.Usuario;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "ingressos_emitidos")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class IngressoEmitido {
 
     @Id

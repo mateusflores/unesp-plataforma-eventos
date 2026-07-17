@@ -2,6 +2,7 @@ package br.unesp.backend.model.entities;
 
 import br.unesp.backend.model.enums.UserRole;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jspecify.annotations.Nullable;
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = "usuarios")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Usuario implements UserDetails {
 
     @Id

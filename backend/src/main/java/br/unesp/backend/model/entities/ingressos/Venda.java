@@ -2,8 +2,10 @@ package br.unesp.backend.model.entities.ingressos;
 
 import br.unesp.backend.model.enums.StatusVenda;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -13,6 +15,8 @@ import java.util.List;
 @Table(name = "vendas")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Venda {
 
     @Id

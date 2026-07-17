@@ -2,8 +2,10 @@ package br.unesp.backend.model.entities.ingressos;
 
 import br.unesp.backend.model.enums.TipoDesconto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -11,6 +13,8 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "cupons_desconto")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CupomDesconto {
 
