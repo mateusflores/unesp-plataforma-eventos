@@ -29,3 +29,7 @@ api:
   security:
     token:
       secret: ${JWT_SECRET:my-secret-key}
+
+admin:
+  default:
+    password: ${ADMIN_DEFAULT_PASSWORD:admin123}
