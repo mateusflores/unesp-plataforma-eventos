@@ -2,8 +2,12 @@ package br.unesp.backend.model.entities;
 
 import br.unesp.backend.model.enums.UnidadeFederativa;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Table(name = "endereco")
+@Data
+@Builder
 public class Endereco {
 
     @Id
@@ -21,62 +25,6 @@ public class Endereco {
 
     private String numero;
 
-    @Column(columnDefinition = "TEXT DEFAULT ''")
     private String complemento;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public UnidadeFederativa getUf() {
-        return uf;
-    }
-
-    public void setUf(UnidadeFederativa uf) {
-        this.uf = uf;
-    }
-
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public String getComplemento() {
-        return complemento;
-    }
-
-    public void setComplemento(String complemento) {
-        this.complemento = complemento;
-    }
 }

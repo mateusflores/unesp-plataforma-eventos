@@ -1,0 +1,286 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+' =====================
+' ENUMS
+' =====================
+
+enum TipoUsuario {
+  ADMIN
+  ORGANIZADOR
+  PARTICIPANTE
+}
+
+enum TipoEntidade {
+  ATLETICA
+  CENTRO_ACADEMICO
+  EMPRESA_JUNIOR
+  COMISSAO
+  OUTRO
+}
+
+enum StatusEvento {
+  RASCUNHO
+  PUBLICADO
+  CANCELADO
+  ENCERRADO
+}
+
+enum TipoDesconto {
+  PERCENTUAL
+  VALOR_FIXO
+}
+
+enum StatusCompra {
+  PENDENTE
+  PAGO
+  CANCELADO
+}
+
+enum MetodoPagamento {
+  PIX
+  CARTAO
+  BOLETO
+}
+
+enum StatusPagamento {
+  APROVADO
+  RECUSADO
+  EM_ANALISE
+}
+
+enum StatusIngresso {
+  VALIDO
+  UTILIZADO
+  CANCELADO
+}
+
+enum StatusInscricao {
+  CONFIRMADA
+  CANCELADA
+  LISTA_ESPERA
+}
+
+' =====================
+' USUÁRIO
+' =====================
+
+class Usuario {
+  id: int
+  nome: string
+  email: string
+  senha: string
+  telefone: string
+  tipo: TipoUsuario
+  ativo: boolean
+}
+
+' =====================
+' ORGANIZADOR (HERANÇA)
+' =====================
+
+abstract class Organizador {
+  id: int
+  nome: string
+  descricao: string
+}
+
+class UsuarioOrganizador {
+}
+
+class Entidade {
+  id: int
+  nome: string
+  tipo: TipoEntidade
+  descricao: string
+  emailContato: string
+}
+
+Organizador <|-- UsuarioOrganizador
+Organizador <|-- Entidade
+
+UsuarioOrganizador --> Usuario : referencia
+
+' Usuários pertencem a entidades
+Usuario "N" -- "N" Entidade : membro
+
+' =====================
+' UNIVERSIDADE
+' =====================
+
+class Universidade {
+  id: int
+  nome: string
+}
+
+class Campus {
+  id: int
+  nome: string
+  cidade: string
+  estado: string
+}
+
+Universidade "1" -- "N" Campus
+Campus "1" -- "N" Evento
+
+' =====================
+' ENDEREÇO
+' =====================
+
+class Endereco {
+  id: int
+  logradouro: string
+  numero: string
+  bairro: string
+  cidade: string
+  estado: string
+  cep: string
+  complemento: string
+}
+
+' =====================
+' EVENTO
+' =====================
+
+class Evento {
+  id: int
+  titulo: string
+  descricao: text
+  dataInicio: datetime
+  dataFim: datetime
+  capacidade: int
+  publico: boolean
+  status: StatusEvento
+  imagemCapa: string
+}
+
+Organizador "1" -- "N" Evento : organiza
+Evento "1" -- "1" Endereco
+
+' =====================
+' CATEGORIA E TAG
+' =====================
+
+class Categoria {
+  id: int
+  nome: string
+}
+
+class Tag {
+  id: int
+  nome: string
+}
+
+Evento "N" -- "N" Categoria
+Evento "N" -- "N" Tag
+
+' =====================
+' INGRESSOS
+' =====================
+
+class Ingresso {
+  id: int
+  nome: string
+  descricao: string
+}
+
+class Lote {
+  id: int
+  nome: string
+  preco: double
+  quantidadeTotal: int
+  quantidadeDisponivel: int
+  dataInicio: datetime
+  dataFim: datetime
+}
+
+Evento "1" -- "N" Ingresso
+Ingresso "1" -- "N" Lote
+
+' =====================
+' CUPOM
+' =====================
+
+class Cupom {
+  id: int
+  codigo: string
+  tipo: TipoDesconto
+  valor: double
+  validade: datetime
+  quantidadeMaxima: int
+}
+
+' =====================
+' COMPRA
+' =====================
+
+class Compra {
+  id: int
+  data: datetime
+  valorTotal: double
+  status: StatusCompra
+}
+
+class ItemCompra {
+  id: int
+  quantidade: int
+  valorUnitario: double
+}
+
+Usuario "1" -- "N" Compra
+Compra "1" -- "N" ItemCompra
+Compra "0..1" -- "1" Cupom
+
+' =====================
+' PAGAMENTO
+' =====================
+
+class Pagamento {
+  id: int
+  metodo: MetodoPagamento
+  status: StatusPagamento
+  data: datetime
+  valor: double
+}
+
+Compra "1" -- "1" Pagamento
+
+' =====================
+' INGRESSO EMITIDO
+' =====================
+
+class IngressoEmitido {
+  id: int
+  codigoQR: string
+  status: StatusIngresso
+  dataEmissao: datetime
+}
+
+ItemCompra "1" -- "N" IngressoEmitido
+Usuario "1" -- "N" IngressoEmitido
+
+' =====================
+' CHECK-IN
+' =====================
+
+class CheckIn {
+  id: int
+  dataHora: datetime
+}
+
+IngressoEmitido "1" -- "1" CheckIn
+
+' =====================
+' INSCRIÇÃO (EVENTO GRATUITO)
+' =====================
+
+class Inscricao {
+  id: int
+  data: datetime
+  status: StatusInscricao
+}
+
+Usuario "1" -- "N" Inscricao
+Evento "1" -- "N" Inscricao
+
+@enduml
