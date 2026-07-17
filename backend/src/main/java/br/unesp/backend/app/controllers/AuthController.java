@@ -2,6 +2,7 @@ package br.unesp.backend.app.controllers;
 
 import br.unesp.backend.app.dtos.auth.*;
 import br.unesp.backend.app.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,25 +18,25 @@ public class AuthController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<LoginResponse> registrar(@RequestBody RegisterRequest request) {
+    public ResponseEntity<LoginResponse> registrar(@Valid @RequestBody RegisterRequest request) {
         LoginResponse response = authService.registrar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/demo")
-    public ResponseEntity<LoginResponse> loginDemo(@RequestBody DemoRequest request) {
+    public ResponseEntity<LoginResponse> loginDemo(@Valid @RequestBody DemoRequest request) {
         LoginResponse response = authService.loginDemo(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/recuperar-senha")
-    public ResponseEntity<Void> recuperarSenha(@RequestBody RecuperarSenhaRequest request) {
+    public ResponseEntity<Void> recuperarSenha(@Valid @RequestBody RecuperarSenhaRequest request) {
         authService.recuperarSenha(request.email());
         return ResponseEntity.noContent().build();
     }

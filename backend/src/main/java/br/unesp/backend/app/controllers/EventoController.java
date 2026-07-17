@@ -4,6 +4,7 @@ import br.unesp.backend.app.dtos.PaginadoDTO;
 import br.unesp.backend.app.dtos.evento.EventoDTO;
 import br.unesp.backend.app.dtos.evento.EventoRequest;
 import br.unesp.backend.app.services.EventoService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,13 +80,13 @@ public class EventoController {
     }
 
     @PostMapping("/eventos")
-    public ResponseEntity<EventoDTO> criar(@RequestBody EventoRequest request) {
+    public ResponseEntity<EventoDTO> criar(@Valid @RequestBody EventoRequest request) {
         var evento = eventoService.criar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(EventoDTO.fromEntity(evento));
     }
 
     @PutMapping("/eventos/{id}")
-    public ResponseEntity<EventoDTO> atualizar(@PathVariable Long id, @RequestBody EventoRequest request) {
+    public ResponseEntity<EventoDTO> atualizar(@PathVariable Long id, @Valid @RequestBody EventoRequest request) {
         try {
             var evento = eventoService.atualizar(id, request);
             return ResponseEntity.ok(EventoDTO.fromEntity(evento));

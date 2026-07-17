@@ -3,6 +3,7 @@ package br.unesp.backend.app.controllers;
 import br.unesp.backend.app.dtos.compra.CompraDTO;
 import br.unesp.backend.app.dtos.compra.CompraRequest;
 import br.unesp.backend.app.services.CompraService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class CompraController {
     }
 
     @PostMapping("/compras")
-    public ResponseEntity<CompraDTO> criar(@RequestBody CompraRequest request) {
+    public ResponseEntity<CompraDTO> criar(@Valid @RequestBody CompraRequest request) {
         var venda = compraService.criar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(CompraDTO.fromEntity(venda));
     }

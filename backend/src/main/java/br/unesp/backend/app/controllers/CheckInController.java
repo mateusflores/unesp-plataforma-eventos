@@ -6,6 +6,7 @@ import br.unesp.backend.app.dtos.checkin.RegistrarCheckInRequest;
 import br.unesp.backend.app.dtos.ingresso.IngressoEmitidoDTO;
 import br.unesp.backend.app.services.CheckInService;
 import br.unesp.backend.model.entities.ingressos.IngressoEmitido;
+import jakarta.validation.Valid;
 import br.unesp.backend.model.enums.StatusIngresso;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class CheckInController {
     }
 
     @PostMapping("/checkin")
-    public ResponseEntity<IngressoEmitidoDTO> registrar(@RequestBody RegistrarCheckInRequest request) {
+    public ResponseEntity<IngressoEmitidoDTO> registrar(@Valid @RequestBody RegistrarCheckInRequest request) {
         var ingresso = checkInService.registrar(request.codigoQR(), request.responsavel());
         return ResponseEntity.ok(IngressoEmitidoDTO.fromEntity(ingresso));
     }

@@ -4,6 +4,7 @@ import br.unesp.backend.app.dtos.cupom.CupomDTO;
 import br.unesp.backend.app.dtos.cupom.CupomRequest;
 import br.unesp.backend.app.dtos.cupom.ValidarCupomRequest;
 import br.unesp.backend.app.services.CupomService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class CupomController {
     }
 
     @PostMapping("/cupons/validar")
-    public ResponseEntity<CupomDTO> validar(@RequestBody ValidarCupomRequest request) {
+    public ResponseEntity<CupomDTO> validar(@Valid @RequestBody ValidarCupomRequest request) {
         var cupom = cupomService.validar(request.codigo(), request.eventoId());
         return ResponseEntity.ok(CupomDTO.fromEntity(cupom));
     }
@@ -40,13 +41,13 @@ public class CupomController {
     }
 
     @PostMapping("/cupons")
-    public ResponseEntity<CupomDTO> criar(@RequestBody CupomRequest request) {
+    public ResponseEntity<CupomDTO> criar(@Valid @RequestBody CupomRequest request) {
         var cupom = cupomService.salvar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(CupomDTO.fromEntity(cupom));
     }
 
     @PutMapping("/cupons/{id}")
-    public ResponseEntity<CupomDTO> atualizar(@PathVariable Long id, @RequestBody CupomRequest request) {
+    public ResponseEntity<CupomDTO> atualizar(@PathVariable Long id, @Valid @RequestBody CupomRequest request) {
         var cupom = cupomService.atualizar(id, request);
         return ResponseEntity.ok(CupomDTO.fromEntity(cupom));
     }

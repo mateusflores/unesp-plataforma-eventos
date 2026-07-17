@@ -7,6 +7,7 @@ import br.unesp.backend.app.dtos.campus.CampusSummary;
 import br.unesp.backend.app.dtos.categoria.CategoriaDTO;
 import br.unesp.backend.app.dtos.universidade.UniversidadeSummary;
 import br.unesp.backend.app.services.AdminService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,13 @@ public class CatalogAdminController {
     }
 
     @PostMapping("/categorias")
-    public ResponseEntity<CategoriaDTO> salvarCategoria(@RequestBody CategoriaRequest request) {
+    public ResponseEntity<CategoriaDTO> salvarCategoria(@Valid @RequestBody CategoriaRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.salvarCategoria(request));
     }
 
     @PutMapping("/categorias/{id}")
     public ResponseEntity<CategoriaDTO> atualizarCategoria(@PathVariable Long id,
-                                                            @RequestBody CategoriaRequest request) {
+                                                            @Valid @RequestBody CategoriaRequest request) {
         return ResponseEntity.ok(adminService.atualizarCategoria(id, request));
     }
 
@@ -38,24 +39,24 @@ public class CatalogAdminController {
     }
 
     @PostMapping("/universidades")
-    public ResponseEntity<UniversidadeSummary> salvarUniversidade(@RequestBody UniversidadeAdminRequest request) {
+    public ResponseEntity<UniversidadeSummary> salvarUniversidade(@Valid @RequestBody UniversidadeAdminRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.salvarUniversidade(request));
     }
 
     @PutMapping("/universidades/{id}")
     public ResponseEntity<UniversidadeSummary> atualizarUniversidade(@PathVariable Long id,
-                                                                     @RequestBody UniversidadeAdminRequest request) {
+                                                                     @Valid @RequestBody UniversidadeAdminRequest request) {
         return ResponseEntity.ok(adminService.atualizarUniversidade(id, request));
     }
 
     @PostMapping("/campi")
-    public ResponseEntity<CampusSummary> salvarCampus(@RequestBody CampusAdminRequest request) {
+    public ResponseEntity<CampusSummary> salvarCampus(@Valid @RequestBody CampusAdminRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.salvarCampus(request));
     }
 
     @PutMapping("/campi/{id}")
     public ResponseEntity<CampusSummary> atualizarCampus(@PathVariable Long id,
-                                                         @RequestBody CampusAdminRequest request) {
+                                                         @Valid @RequestBody CampusAdminRequest request) {
         return ResponseEntity.ok(adminService.atualizarCampus(id, request));
     }
 }

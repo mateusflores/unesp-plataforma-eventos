@@ -1,6 +1,8 @@
 package br.unesp.backend.app.dtos.evento;
 
 import br.unesp.backend.app.dtos.ingresso.IngressoRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
@@ -21,15 +23,18 @@ public record EventoRequest(
         List<Long> categoriaIds,
         List<Long> tagIds,
         String status,
-        EnderecoRequest endereco,
-        List<IngressoRequest> ingressos
+        @Valid EnderecoRequest endereco,
+        @Valid List<IngressoRequest> ingressos
 ) {
     public record EnderecoRequest(
+            @NotBlank(message = "Informe o logradouro.")
             String logradouro,
             String numero,
             String bairro,
+            @NotBlank(message = "Informe a cidade.")
             String cidade,
             String estado,
+            @NotBlank(message = "Informe o CEP.")
             String cep,
             String complemento
     ) {}

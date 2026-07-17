@@ -1,13 +1,14 @@
 package br.unesp.backend.app.controllers;
 
 import br.unesp.backend.app.dtos.inscricao.InscricaoDTO;
+import br.unesp.backend.app.dtos.inscricao.InscricaoRequest;
 import br.unesp.backend.app.services.InscricaoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class InscricaoController {
@@ -19,10 +20,8 @@ public class InscricaoController {
     }
 
     @PostMapping("/inscricoes")
-    public ResponseEntity<InscricaoDTO> inscrever(@RequestBody Map<String, Long> body) {
-        Long usuarioId = body.get("usuarioId");
-        Long eventoId = body.get("eventoId");
-        var inscricao = inscricaoService.inscrever(usuarioId, eventoId);
+    public ResponseEntity<InscricaoDTO> inscrever(@Valid @RequestBody InscricaoRequest request) {
+        var inscricao = inscricaoService.inscrever(request.usuarioId(), request.eventoId());
         return ResponseEntity.status(HttpStatus.CREATED).body(InscricaoDTO.fromEntity(inscricao));
     }
 
