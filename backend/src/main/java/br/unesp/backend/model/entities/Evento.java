@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -78,7 +79,7 @@ public class Evento {
         joinColumns = @JoinColumn(name = "evento_id"),
         inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
-    private List<Categoria> categorias;
+    private List<Categoria> categorias = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -86,8 +87,8 @@ public class Evento {
         joinColumns = @JoinColumn(name = "evento_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ingresso> ingressos;
+    private List<Ingresso> ingressos = new ArrayList<>();
 }
