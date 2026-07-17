@@ -67,6 +67,10 @@ public class CompraService {
                     "Evento indisponível para compra.");
         }
 
+        if (request.itens() == null || request.itens().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Informe ao menos um ingresso.");
+        }
+
         MetodoPagamento metodo = mapMetodo(request.metodo());
 
         BigDecimal valorTotal = BigDecimal.ZERO;
@@ -184,6 +188,10 @@ public class CompraService {
     public Venda cancelar(Long compraId) {
         Venda venda = vendaRepository.findById(compraId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Compra não encontrada"));
+
+        if (venda.getStatus() == StatusVenda.CANCELADO) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Compra já cancelada.");
+        }
 
         venda.setStatus(StatusVenda.CANCELADO);
         venda = vendaRepository.save(venda);

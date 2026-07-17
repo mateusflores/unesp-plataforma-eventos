@@ -8,7 +8,6 @@ import br.unesp.backend.model.enums.StatusInscricao;
 import br.unesp.backend.model.repositories.EventoRepository;
 import br.unesp.backend.model.repositories.InscricaoRepository;
 import br.unesp.backend.model.repositories.UsuarioRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +89,7 @@ public class InscricaoService {
 
     public Inscricao status(Long usuarioId, Long eventoId) {
         return inscricaoRepository.findByUsuarioIdAndEventoId(usuarioId, eventoId)
-                .orElseThrow(() -> new EntityNotFoundException("Inscrição não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inscrição não encontrada"));
     }
 
     @Transactional
@@ -98,6 +97,10 @@ public class InscricaoService {
         Inscricao inscricao = inscricaoRepository.findById(inscricaoId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Inscrição não encontrada"));
+
+        if (inscricao.getStatus() == StatusInscricao.CANCELADA) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Inscrição já cancelada.");
+        }
 
         inscricao.setStatus(StatusInscricao.CANCELADA);
         inscricao = inscricaoRepository.save(inscricao);

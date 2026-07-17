@@ -6,8 +6,10 @@ import br.unesp.backend.infra.security.JwtTokenProvider;
 import br.unesp.backend.model.entities.Usuario;
 import br.unesp.backend.model.enums.UserRole;
 import br.unesp.backend.model.repositories.UsuarioRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
@@ -26,7 +28,7 @@ public class AuthService {
 
     public LoginResponse registrar(RegisterRequest request) {
         if (usuarioRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("E-mail já cadastrado");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado");
         }
 
         Usuario usuario = new Usuario();
@@ -45,10 +47,14 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
         Usuario usuario = usuarioRepository.findByEmail(request.email())
-                .orElseThrow(() -> new IllegalArgumentException("E-mail ou senha inválidos"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos"));
 
         if (!passwordEncoder.matches(request.senha(), usuario.getSenha())) {
-            throw new IllegalArgumentException("E-mail ou senha inválidos");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos");
+        }
+
+        if (!Boolean.TRUE.equals(usuario.getIsAtivo())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuário desativado. Contate o administrador.");
         }
 
         String token = tokenProvider.generateToken(usuario.getId(), usuario.getUserRole().name());
@@ -57,13 +63,15 @@ public class AuthService {
 
     public LoginResponse loginDemo(DemoRequest request) {
         Usuario usuario = usuarioRepository.findById(request.usuarioId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         String token = tokenProvider.generateToken(usuario.getId(), usuario.getUserRole().name());
         return new LoginResponse(token, UsuarioDTO.fromEntity(usuario));
     }
 
     public void recuperarSenha(String email) {
-        // Placeholder — em produção enviaria e-mail de recuperação
+        if (!usuarioRepository.findByEmail(email).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "E-mail não encontrado");
+        }
     }
 }

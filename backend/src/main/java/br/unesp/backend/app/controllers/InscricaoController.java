@@ -2,7 +2,6 @@ package br.unesp.backend.app.controllers;
 
 import br.unesp.backend.app.dtos.inscricao.InscricaoDTO;
 import br.unesp.backend.app.services.InscricaoService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +40,7 @@ public class InscricaoController {
         try {
             var inscricao = inscricaoService.status(usuarioId, eventoId);
             return ResponseEntity.ok(InscricaoDTO.fromEntity(inscricao));
-        } catch (EntityNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.noContent().build();
         }
     }

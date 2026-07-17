@@ -8,17 +8,18 @@ import br.unesp.backend.model.entities.*;
 import br.unesp.backend.model.enums.StatusEvento;
 import br.unesp.backend.model.enums.UnidadeFederativa;
 import br.unesp.backend.model.repositories.*;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.DateTimeException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EventoService {
@@ -64,12 +65,12 @@ public class EventoService {
 
     public Evento porSlug(String slug) {
         return eventoRepository.findBySlug(slug)
-                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado: " + slug));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não encontrado: " + slug));
     }
 
     public Evento porId(Long id) {
         return eventoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não encontrado: " + id));
     }
 
     public List<Evento> porOrganizador(Long organizadorId) {
@@ -82,7 +83,11 @@ public class EventoService {
         aplicarRequest(evento, request);
         evento.setStatus(StatusEvento.RASCUNHO);
         if (request.status() != null) {
-            evento.setStatus(StatusEvento.valueOf(request.status()));
+            try {
+                evento.setStatus(StatusEvento.valueOf(request.status()));
+            } catch (IllegalArgumentException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Status inválido: " + request.status());
+            }
         }
         evento.setSlug(gerarSlug(request.titulo()));
         evento.setInscritos(0);
@@ -95,10 +100,14 @@ public class EventoService {
     @Transactional
     public Evento atualizar(Long id, EventoRequest request) {
         Evento evento = eventoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não encontrado: " + id));
         aplicarRequest(evento, request);
         if (request.status() != null) {
-            evento.setStatus(StatusEvento.valueOf(request.status()));
+            try {
+                evento.setStatus(StatusEvento.valueOf(request.status()));
+            } catch (IllegalArgumentException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Status inválido: " + request.status());
+            }
         }
         evento.getIngressos().clear();
         eventoRepository.flush();
@@ -109,6 +118,18 @@ public class EventoService {
     @Transactional
     public void publicar(Long id) {
         Evento evento = porId(id);
+        if (evento.getTitulo() == null || evento.getTitulo().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "O título do evento é obrigatório para publicação.");
+        }
+        if (evento.getDataInicio() == null) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "A data de início é obrigatória para publicação.");
+        }
+        if (evento.getOrganizador() == null) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "O organizador é obrigatório para publicação.");
+        }
         evento.setStatus(StatusEvento.PUBLICADO);
         eventoRepository.save(evento);
     }
@@ -155,8 +176,10 @@ public class EventoService {
             endCopia.setComplemento(endOriginal.getComplemento());
             copia.setEndereco(endCopia);
         }
-        copia.setCategorias(new ArrayList<>(original.getCategorias()));
-        copia.setTags(new ArrayList<>(original.getTags()));
+        copia.setCategorias(original.getCategorias() != null
+                ? new ArrayList<>(original.getCategorias()) : new ArrayList<>());
+        copia.setTags(original.getTags() != null
+                ? new ArrayList<>(original.getTags()) : new ArrayList<>());
         copia = eventoRepository.save(copia);
         if (original.getIngressos() != null) {
             for (Ingresso ingOriginal : original.getIngressos()) {
@@ -193,22 +216,36 @@ public class EventoService {
         if (request.imagemCapa() != null) evento.setImagemCapa(request.imagemCapa());
         if (request.gratuito() != null) evento.setGratuito(request.gratuito());
         if (request.publico() != null) evento.setPublico(request.publico());
-        if (request.dataInicio() != null) evento.setDataInicio(ZonedDateTime.parse(request.dataInicio()));
-        if (request.dataFim() != null) evento.setDataFim(ZonedDateTime.parse(request.dataFim()));
+        if (request.dataInicio() != null) {
+            try {
+                evento.setDataInicio(ZonedDateTime.parse(request.dataInicio()));
+            } catch (DateTimeException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Formato de data inválido para dataInicio: " + request.dataInicio());
+            }
+        }
+        if (request.dataFim() != null) {
+            try {
+                evento.setDataFim(ZonedDateTime.parse(request.dataFim()));
+            } catch (DateTimeException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Formato de data inválido para dataFim: " + request.dataFim());
+            }
+        }
         if (request.local() != null) evento.setLocal(request.local());
         if (request.capacidade() != null) evento.setCapacidade(request.capacidade());
 
         if (request.organizadorId() != null) {
             evento.setOrganizador(organizadorRepository.findById(request.organizadorId())
-                    .orElseThrow(() -> new EntityNotFoundException("Organizador não encontrado")));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Organizador não encontrado")));
         }
         if (request.universidadeId() != null) {
             evento.setUniversidade(universidadeRepository.findById(request.universidadeId())
-                    .orElseThrow(() -> new EntityNotFoundException("Universidade não encontrada")));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Universidade não encontrada")));
         }
         if (request.campusId() != null) {
             evento.setCampus(campusRepository.findById(request.campusId())
-                    .orElseThrow(() -> new EntityNotFoundException("Campus não encontrado")));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Campus não encontrado")));
         }
 
         if (request.endereco() != null) {
@@ -220,7 +257,14 @@ public class EventoService {
             if (req.cidade() != null) end.setCidade(req.cidade());
             if (req.cep() != null) end.setCep(req.cep());
             if (req.complemento() != null) end.setComplemento(req.complemento());
-            if (req.estado() != null) end.setUf(UnidadeFederativa.fromSigla(req.estado()));
+            if (req.estado() != null) {
+                try {
+                    end.setUf(UnidadeFederativa.fromSigla(req.estado()));
+                } catch (IllegalArgumentException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "UF inválida: " + req.estado());
+                }
+            }
             evento.setEndereco(end);
         }
 
@@ -250,8 +294,20 @@ public class EventoService {
                     lote.setQuantidadeTotal(lr.quantidadeTotal() != null ? lr.quantidadeTotal() : 0);
                     lote.setQuantidadeDisponivel(lr.quantidadeDisponivel() != null ?
                             lr.quantidadeDisponivel() : lote.getQuantidadeTotal());
-                    lote.setDataInicio(lr.dataInicio() != null ? ZonedDateTime.parse(lr.dataInicio()) : null);
-                    lote.setDataFim(lr.dataFim() != null ? ZonedDateTime.parse(lr.dataFim()) : null);
+                    if (lr.dataInicio() != null) {
+                        try { lote.setDataInicio(ZonedDateTime.parse(lr.dataInicio())); }
+                        catch (DateTimeException e) {
+                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                                    "Formato de data inválido para lote: " + lr.dataInicio());
+                        }
+                    }
+                    if (lr.dataFim() != null) {
+                        try { lote.setDataFim(ZonedDateTime.parse(lr.dataFim())); }
+                        catch (DateTimeException e) {
+                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                                    "Formato de data inválido para lote: " + lr.dataFim());
+                        }
+                    }
                     lote.setIngresso(ingresso);
                     loteRepository.save(lote);
                 }
