@@ -1,0 +1,72 @@
+/* ---- Capa ---- */
+.event-cover {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.event-cover__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: opacity var(--transition-slow);
+}
+.event-cover__fallback {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  color: rgba(255, 255, 255, 0.92);
+  background:
+    radial-gradient(circle at 28% 18%, rgba(255,255,255,.22), transparent 46%),
+    radial-gradient(circle at 85% 90%, rgba(0,0,0,.18), transparent 50%),
+    linear-gradient(135deg, var(--cat), color-mix(in srgb, var(--cat) 45%, #1c1e2b));
+}
+
+/* ---- Category tag ---- */
+.cat-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: var(--fs-xs); font-weight: 600;
+  color: var(--cat);
+  background: color-mix(in srgb, var(--cat) 12%, transparent);
+  padding: 3px 9px; border-radius: var(--radius-full);
+}
+
+/* ---- Barra de vagas ---- */
+.barra-vagas { height: 6px; background: var(--surface-inset); border-radius: 999px; overflow: hidden; }
+.barra-vagas > span { display: block; height: 100%; border-radius: 999px; transition: width var(--transition-slow); }
+
+/* ---- Event card ---- */
+.event-card {
+  display: flex; flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: var(--transition);
+  box-shadow: var(--shadow-xs);
+  height: 100%;
+}
+.event-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--border-strong); }
+.event-card--fade .event-card__cover { filter: grayscale(0.45); opacity: 0.9; }
+.event-card__cover { position: relative; }
+.event-card__badges { position: absolute; top: var(--sp-3); left: var(--sp-3); display: flex; gap: 6px; }
+.event-card__badges .badge { background: rgba(255,255,255,.95); box-shadow: var(--shadow-sm); backdrop-filter: blur(4px); }
+:root[data-theme='dark'] .event-card__badges .badge { background: rgba(25,27,37,.9); }
+.event-card__destaque {
+  position: absolute; top: var(--sp-3); right: var(--sp-3);
+  font-size: var(--fs-xs); font-weight: 700; color: #fff;
+  background: var(--accent-500); padding: 3px 9px; border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+.event-card__body { padding: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-2); flex: 1; }
+.event-card__titulo { font-size: var(--fs-md); font-weight: 700; line-height: 1.25; }
+.event-card__meta { display: flex; flex-direction: column; gap: 5px; margin-top: auto; padding-top: var(--sp-1); }
+.event-card__meta li { display: flex; align-items: center; gap: 7px; font-size: var(--fs-sm); color: var(--text-secondary); }
+.event-card__meta svg { flex-shrink: 0; color: var(--text-muted); }
+
+/* Grid de eventos reutilizável */
+.eventos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: var(--sp-5);
+}
+@media (max-width: 640px) {
+  .eventos-grid { grid-template-columns: 1fr; gap: var(--sp-4); }
+}
