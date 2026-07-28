@@ -5,6 +5,10 @@ import { App } from './App';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { CatalogProvider } from './contexts/CatalogContext';
+<<<<<<< HEAD
+=======
+import './index.css';
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/utilities.css';

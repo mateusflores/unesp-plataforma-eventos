@@ -34,8 +34,13 @@ export function EventFilters({ filtros, onChange, onLimpar, totalResultados }: P
 
   const controlesInternos = (
     <>
+<<<<<<< HEAD
       <div className="filtro-grupo">
         <div className="filtro-grupo__titulo">Universidade</div>
+=======
+      <div className="mb-5">
+        <div className="mb-3 text-sm font-semibold text-slate-900 dark:text-white">Universidade</div>
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
         <Select
           value={filtros.universidadeId ?? ''}
           onChange={(e) =>
@@ -48,8 +53,13 @@ export function EventFilters({ filtros, onChange, onLimpar, totalResultados }: P
           ))}
         </Select>
       </div>
+<<<<<<< HEAD
       <div className="filtro-grupo">
         <div className="filtro-grupo__titulo">Campus</div>
+=======
+      <div className="mb-5">
+        <div className="mb-3 text-sm font-semibold text-slate-900 dark:text-white">Campus</div>
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
         <Select
           value={filtros.campusId ?? ''}
           onChange={(e) => onChange({ campusId: e.target.value ? Number(e.target.value) : undefined })}
@@ -60,9 +70,15 @@ export function EventFilters({ filtros, onChange, onLimpar, totalResultados }: P
           ))}
         </Select>
       </div>
+<<<<<<< HEAD
       <div className="filtro-grupo">
         <div className="filtro-grupo__titulo">Categorias</div>
         <div className="filtro-opcoes">
+=======
+      <div className="mb-5">
+        <div className="mb-3 text-sm font-semibold text-slate-900 dark:text-white">Categorias</div>
+        <div className="flex flex-wrap gap-2">
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
           {categorias.map((c) => (
             <Chip key={c.id} cor={c.cor} ativo={catsAtivas.includes(c.id)} onClick={() => toggleCategoria(c.id)}>
               {c.nome}
@@ -70,9 +86,15 @@ export function EventFilters({ filtros, onChange, onLimpar, totalResultados }: P
           ))}
         </div>
       </div>
+<<<<<<< HEAD
       <div className="filtro-grupo">
         <div className="filtro-grupo__titulo">Preço</div>
         <div className="filtro-opcoes">
+=======
+      <div className="mb-5">
+        <div className="mb-3 text-sm font-semibold text-slate-900 dark:text-white">Preço</div>
+        <div className="flex flex-wrap gap-2">
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
           <Chip ativo={filtros.gratuito === undefined} onClick={() => onChange({ gratuito: undefined })}>Todos</Chip>
           <Chip ativo={filtros.gratuito === true} onClick={() => onChange({ gratuito: true })}>Gratuitos</Chip>
           <Chip ativo={filtros.gratuito === false} onClick={() => onChange({ gratuito: false })}>Pagos</Chip>
@@ -83,10 +105,18 @@ export function EventFilters({ filtros, onChange, onLimpar, totalResultados }: P
 
   return (
     <>
+<<<<<<< HEAD
       <div className="filtros-bar">
         <label className="busca-inline">
           <Search size={17} />
           <input
+=======
+      <div className="mb-5 flex flex-wrap items-center gap-3">
+        <label className="flex min-w-[220px] max-w-[380px] flex-1 items-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-2.5 text-slate-500 shadow-sm focus-within:border-brand-400 focus-within:ring-2 focus-within:ring-brand-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:focus-within:border-brand-400 dark:focus-within:ring-brand-900/40">
+          <Search size={17} />
+          <input
+            className="w-full border-none bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-200"
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
             value={filtros.busca ?? ''}
             onChange={(e) => onChange({ busca: e.target.value || undefined })}
             placeholder="Buscar por nome ou local…"
@@ -97,8 +127,12 @@ export function EventFilters({ filtros, onChange, onLimpar, totalResultados }: P
           )}
         </label>
 
+<<<<<<< HEAD
         {/* Selects diretos no desktop */}
         <div className="hide-mobile row gap-2">
+=======
+        <div className="hidden items-center gap-2 md:flex">
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
           <Select
             value={filtros.universidadeId ?? ''}
             onChange={(e) => onChange({ universidadeId: e.target.value ? Number(e.target.value) : undefined, campusId: undefined })}
@@ -129,8 +163,12 @@ export function EventFilters({ filtros, onChange, onLimpar, totalResultados }: P
         )}
       </div>
 
+<<<<<<< HEAD
       {/* Chips de categoria (desktop, acesso rápido) */}
       <div className="filtros-chips hide-mobile mb-4">
+=======
+      <div className="mb-4 hidden items-center gap-2 md:flex">
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
         {categorias.map((c) => (
           <Chip key={c.id} cor={c.cor} ativo={catsAtivas.includes(c.id)} onClick={() => toggleCategoria(c.id)}>
             {c.nome}
@@ -138,12 +176,20 @@ export function EventFilters({ filtros, onChange, onLimpar, totalResultados }: P
         ))}
       </div>
 
+<<<<<<< HEAD
       {/* Resumo de filtros ativos + total */}
       {(filtrosAtivos > 0 || totalResultados !== undefined) && (
         <div className="resultado-info">
           <strong>{totalResultados !== undefined ? `${totalResultados} evento${totalResultados === 1 ? '' : 's'}` : ''}</strong>
           {filtrosAtivos > 0 && (
             <div className="filtros-chips">
+=======
+      {(filtrosAtivos > 0 || totalResultados !== undefined) && (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <strong className="text-base text-slate-900 dark:text-white">{totalResultados !== undefined ? `${totalResultados} evento${totalResultados === 1 ? '' : 's'}` : ''}</strong>
+          {filtrosAtivos > 0 && (
+            <div className="flex flex-wrap items-center gap-2">
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
               {filtros.busca && <Chip ativo onRemover={() => onChange({ busca: undefined })}>“{filtros.busca}”</Chip>}
               {catsAtivas.map((id) => {
                 const c = categorias.find((x) => x.id === id);

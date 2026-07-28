@@ -25,8 +25,13 @@ export function CategoriaTag({ id, link }: { id: number; link?: boolean }) {
   if (!cat) return null;
   const conteudo = (
     <span
+<<<<<<< HEAD
       className="cat-tag"
       style={{ ['--cat' as string]: cat.cor }}
+=======
+      className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-700 dark:border-slate-700 dark:text-slate-300"
+      style={{ borderColor: `${cat.cor}55`, color: cat.cor, backgroundColor: `${cat.cor}14` }}
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
     >
       <CategoryIcon nome={cat.icone} size={13} />
       {cat.nome}

@@ -30,7 +30,13 @@ export function CalendarPage() {
 
       <EventFilters filtros={filtros} onChange={patch} onLimpar={() => setFiltros({})} totalResultados={data?.total} />
 
+<<<<<<< HEAD
       <div className="mb-6"><CategoriaLegenda /></div>
+=======
+      <div className="mb-6 flex flex-wrap gap-3">
+        <CategoriaLegenda />
+      </div>
+>>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
 
       {estado === 'error' ? (
         <ErrorState status={statusHttp} mensagem={erro} onRetry={recarregar} />
