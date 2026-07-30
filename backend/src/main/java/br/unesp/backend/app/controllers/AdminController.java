@@ -28,6 +28,11 @@ public class AdminController {
         return ResponseEntity.ok(adminService.alternarUsuarioAtivo(id));
     }
 
+    @PatchMapping("/usuarios/{id}/promover")
+    public ResponseEntity<UsuarioDTO> promoverUsuario(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.promoverUsuario(id));
+    }
+
     @DeleteMapping("/usuarios/{id}")
     public ResponseEntity<Void> removerUsuario(@PathVariable Long id) {
         adminService.removerUsuario(id);

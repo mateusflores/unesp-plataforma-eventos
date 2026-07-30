@@ -33,6 +33,9 @@ export function Button({
     md: 'h-10 px-5 text-sm',
     lg: 'h-12 px-6 text-base',
   };
+  const sizeClass = apenasIcone
+    ? `h-9 w-9 ${tamanho === 'lg' ? 'h-12 w-12' : tamanho === 'md' ? 'h-10 w-10' : ''} text-sm`
+    : sizes[tamanho];
   const variants = {
     primary: 'bg-brand-600 text-white hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400',
     accent: 'bg-accent-500 text-white hover:bg-accent-600',
@@ -43,7 +46,7 @@ export function Button({
   } as const;
 
   return (
-    <button className={[base, sizes[tamanho], variants[variante], bloco ? 'w-full' : '', apenasIcone ? 'aspect-square p-0' : '', className].filter(Boolean).join(' ')} disabled={disabled || carregando} {...rest}>
+    <button className={[base, sizeClass, variants[variante], bloco ? 'w-full' : '', className].filter(Boolean).join(' ')} disabled={disabled || carregando} {...rest}>
       {carregando ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/70 border-t-transparent" aria-hidden /> : iconeEsq}
       {!apenasIcone && children}
       {iconeDir}

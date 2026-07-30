@@ -113,6 +113,7 @@ export const apiServices: Services = {
   admin: {
     usuarios: () => http.get('/admin/usuarios'),
     alternarUsuarioAtivo: (id) => http.patch(`/admin/usuarios/${id}/alternar`),
+    promoverUsuario: (id) => http.patch(`/admin/usuarios/${id}/promover`),
     removerUsuario: (id) => http.del(`/admin/usuarios/${id}`),
     salvarCategoria: (c) => (c.id ? http.put(`/categorias/${c.id}`, c) : http.post('/categorias', c)),
     removerCategoria: (id) => http.del(`/categorias/${id}`),

@@ -102,6 +102,7 @@ export interface CatalogService {
 export interface AdminService {
   usuarios(): Promise<Usuario[]>;
   alternarUsuarioAtivo(id: number): Promise<Usuario>;
+  promoverUsuario(id: number): Promise<Usuario>;
   removerUsuario(id: number): Promise<void>;
   salvarCategoria(categoria: Partial<Categoria>): Promise<Categoria>;
   removerCategoria(id: number): Promise<void>;

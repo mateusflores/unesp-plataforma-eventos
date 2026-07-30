@@ -6,6 +6,7 @@ import br.unesp.backend.app.dtos.categoria.CategoriaDTO;
 import br.unesp.backend.app.dtos.universidade.UniversidadeSummary;
 import br.unesp.backend.app.dtos.usuario.UsuarioDTO;
 import br.unesp.backend.model.entities.*;
+import br.unesp.backend.model.enums.UserRole;
 import br.unesp.backend.model.enums.*;
 import br.unesp.backend.model.repositories.*;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,23 @@ public class AdminService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
         usuario.setIsAtivo(!Boolean.TRUE.equals(usuario.getIsAtivo()));
+        usuario = usuarioRepository.save(usuario);
+        return UsuarioDTO.fromEntity(usuario);
+    }
+
+    @Transactional
+    public UsuarioDTO promoverUsuario(Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        if (usuario.getUserRole() == UserRole.ORGANIZADOR) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Usuário já é organizador.");
+        }
+        if (usuario.getUserRole() == UserRole.ADMIN) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Administradores não podem ser promovidos.");
+        }
+
+        usuario.setUserRole(UserRole.ORGANIZADOR);
         usuario = usuarioRepository.save(usuario);
         return UsuarioDTO.fromEntity(usuario);
     }

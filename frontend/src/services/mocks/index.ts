@@ -535,6 +535,16 @@ export const mockServices: Services = {
       if (idx >= 0) store.usuarios.splice(idx, 1);
       persist();
     },
+    async promoverUsuario(id) {
+      await delay(200);
+      const u = store.usuarios.find((x) => x.id === id);
+      if (!u) throw new ApiError(404, 'Usuário não encontrado.');
+      if (u.tipo === 'ORGANIZADOR') throw new ApiError(409, 'Usuário já é organizador.');
+      if (u.tipo === 'ADMIN') throw new ApiError(409, 'Administradores não podem ser promovidos.');
+      u.tipo = 'ORGANIZADOR';
+      persist();
+      return clone(u);
+    },
     async salvarCategoria(dados) {
       await delay();
       if (dados.id) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, ShieldCheck } from 'lucide-react';
 import { services } from '@/services';
 import { useToast } from '@/contexts/ToastContext';
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -19,6 +19,7 @@ export function AdminUsuariosPage() {
   const toast = useToast();
   const [usuarios, setUsuarios] = useState<Usuario[] | null>(null);
   const [remover, setRemover] = useState<Usuario | null>(null);
+  const [promover, setPromover] = useState<Usuario | null>(null);
   const [processando, setProcessando] = useState(false);
 
   const carregar = () => services.admin.usuarios().then(setUsuarios);
@@ -36,6 +37,20 @@ export function AdminUsuariosPage() {
     await services.admin.removerUsuario(remover.id);
     toast.sucesso('Usuário removido');
     setRemover(null);
+    setProcessando(false);
+    carregar();
+  };
+
+  const confirmarPromocao = async () => {
+    if (!promover) return;
+    setProcessando(true);
+    try {
+      await services.admin.promoverUsuario(promover.id);
+      toast.sucesso(`${promover.nome} promovido a organizador`);
+    } catch (e) {
+      toast.erro('Erro', e instanceof Error ? e.message : 'Não foi possível promover o usuário');
+    }
+    setPromover(null);
     setProcessando(false);
     carregar();
   };
@@ -63,7 +78,14 @@ export function AdminUsuariosPage() {
       chave: 'acoes',
       titulo: 'Ações',
       alinhar: 'right',
-      render: (u) => <Button variante="ghost" tamanho="sm" apenasIcone iconeEsq={<Trash2 size={16} />} onClick={() => setRemover(u)} />,
+      render: (u) => (
+        <div className="row gap-1" style={{ justifyContent: 'flex-end' }}>
+          {u.tipo === 'PARTICIPANTE' && (
+            <Button variante="ghost" tamanho="sm" apenasIcone iconeEsq={<ShieldCheck size={16} />} onClick={() => setPromover(u)} title="Promover a organizador" />
+          )}
+          <Button variante="ghost" tamanho="sm" apenasIcone iconeEsq={<Trash2 size={16} />} onClick={() => setRemover(u)} title="Remover usuário" />
+        </div>
+      ),
     },
   ];
 
@@ -80,12 +102,21 @@ export function AdminUsuariosPage() {
       <ConfirmDialog
         aberto={!!remover}
         titulo="Remover usuário"
-        mensagem={`Tem certeza que deseja remover ${remover?.nome}? Esta ação é simulada e não pode ser desfeita.`}
+        mensagem={`Tem certeza que deseja remover ${remover?.nome}? Esta ação não pode ser desfeita.`}
         confirmarLabel="Remover"
         perigo
         carregando={processando}
         onConfirmar={confirmarRemocao}
         onCancelar={() => setRemover(null)}
+      />
+      <ConfirmDialog
+        aberto={!!promover}
+        titulo="Promover a organizador"
+        mensagem={`Deseja promover ${promover?.nome} a organizador? Ele terá acesso ao painel de organização de eventos.`}
+        confirmarLabel="Promover"
+        carregando={processando}
+        onConfirmar={confirmarPromocao}
+        onCancelar={() => setPromover(null)}
       />
     </div>
   );
