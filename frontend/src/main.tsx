@@ -12,6 +12,7 @@ import './styles/base.css';
 import './styles/utilities.css';
 import './components/ui/ui.css';
 import './styles/pages.css';
+import './components/layout/layout.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
