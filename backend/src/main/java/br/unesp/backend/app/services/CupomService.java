@@ -1,6 +1,7 @@
 package br.unesp.backend.app.services;
 
 import br.unesp.backend.app.dtos.cupom.CupomRequest;
+import br.unesp.backend.infra.config.DateUtils;
 import br.unesp.backend.model.entities.Evento;
 import br.unesp.backend.model.entities.ingressos.CupomDesconto;
 import br.unesp.backend.model.enums.TipoDesconto;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.DateTimeException;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -102,7 +104,13 @@ public class CupomService {
         if (request.tipo() != null) cupom.setTipoDesconto(TipoDesconto.valueOf(request.tipo()));
         if (request.valor() != null) cupom.setValor(request.valor());
         if (request.quantidadeMaxima() != null) cupom.setQuantidadeMaxima(request.quantidadeMaxima());
-        if (request.validade() != null) cupom.setValidade(ZonedDateTime.parse(request.validade()));
+        if (request.validade() != null) {
+            try {
+                cupom.setValidade(DateUtils.parseZonedDateTime(request.validade()));
+            } catch (DateTimeException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            }
+        }
         if (request.ativo() != null) cupom.setAtivo(request.ativo());
 
         if (request.eventoId() != null) {

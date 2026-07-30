@@ -2,6 +2,7 @@ package br.unesp.backend.app.dtos.evento;
 
 import br.unesp.backend.app.dtos.endereco.EnderecoCompletoDTO;
 import br.unesp.backend.app.dtos.ingresso.IngressoDTO;
+import br.unesp.backend.infra.config.DateUtils;
 import br.unesp.backend.model.entities.Evento;
 
 import java.math.BigDecimal;
@@ -40,8 +41,8 @@ public record EventoDTO(
                 evento.getSlug(),
                 evento.getDescricao(),
                 evento.getResumo(),
-                evento.getDataInicio() != null ? evento.getDataInicio().toString() : null,
-                evento.getDataFim() != null ? evento.getDataFim().toString() : null,
+                evento.getDataInicio() != null ? DateUtils.formatZonedDateTime(evento.getDataInicio()) : null,
+                evento.getDataFim() != null ? DateUtils.formatZonedDateTime(evento.getDataFim()) : null,
                 evento.getCapacidade(),
                 evento.getInscritos(),
                 evento.getPublico(),

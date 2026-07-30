@@ -1,5 +1,6 @@
 package br.unesp.backend.app.dtos.checkin;
 
+import br.unesp.backend.infra.config.DateUtils;
 import br.unesp.backend.model.entities.ingressos.CheckIn;
 
 public record CheckInDTO(
@@ -12,7 +13,7 @@ public record CheckInDTO(
         return new CheckInDTO(
                 checkin.getId(),
                 checkin.getIngressoEmitido() != null ? checkin.getIngressoEmitido().getId() : null,
-                checkin.getDataHora() != null ? checkin.getDataHora().toString() : null,
+                checkin.getDataHora() != null ? DateUtils.formatZonedDateTime(checkin.getDataHora()) : null,
                 checkin.getResponsavel()
         );
     }

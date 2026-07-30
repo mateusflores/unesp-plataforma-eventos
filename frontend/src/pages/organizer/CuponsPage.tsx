@@ -5,7 +5,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { useOrganizadorIds, useEventosDoOrganizador } from '@/hooks/useOrganizer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Badge, Button, Input, Select, Switch, Modal, Skeleton, EmptyState } from '@/components/ui';
-import { moeda, dataCurta } from '@/utils/format';
+import { moeda, dataCurta, toISOWithOffset } from '@/utils/format';
 import type { Cupom, TipoDesconto } from '@/types';
 import type { Tom } from '@/utils/dominio';
 
@@ -59,13 +59,17 @@ export function OrgCuponsPage() {
       <PageHeader
         titulo="Cupons"
         subtitulo="Crie descontos percentuais ou de valor fixo para seus eventos."
-        acoes={<Button iconeEsq={<Plus size={16} />} onClick={() => setEditar({ tipo: 'PERCENTUAL', valor: 10, quantidadeMaxima: 100, ativo: true, validade: '2026-08-31T23:59:59', eventoId: eventosPagos[0]?.id })}>Novo cupom</Button>}
+        acoes={eventosPagos.length > 0 && <Button iconeEsq={<Plus size={16} />} onClick={() => setEditar({ tipo: 'PERCENTUAL', valor: 10, quantidadeMaxima: 100, ativo: true, validade: toISOWithOffset('2026-08-31T23:59:59'), eventoId: eventosPagos[0].id })}>Novo cupom</Button>}
       />
 
       {cupons === null ? (
         <Skeleton h={280} radius="var(--radius-lg)" />
       ) : cupons.length === 0 ? (
-        <EmptyState icone={<BadgePercent size={28} />} titulo="Nenhum cupom" descricao="Crie cupons de desconto para impulsionar suas vendas." acao={<Button onClick={() => setEditar({ tipo: 'PERCENTUAL', valor: 10, quantidadeMaxima: 100, ativo: true, validade: '2026-08-31T23:59:59', eventoId: eventosPagos[0]?.id })}>Criar cupom</Button>} />
+        eventosPagos.length === 0 ? (
+          <EmptyState icone={<BadgePercent size={28} />} titulo="Nenhum evento pago" descricao="Crie um evento pago antes de cadastrar cupons de desconto." />
+        ) : (
+          <EmptyState icone={<BadgePercent size={28} />} titulo="Nenhum cupom" descricao="Crie cupons de desconto para impulsionar suas vendas." acao={<Button onClick={() => setEditar({ tipo: 'PERCENTUAL', valor: 10, quantidadeMaxima: 100, ativo: true, validade: toISOWithOffset('2026-08-31T23:59:59'), eventoId: eventosPagos[0].id })}>Criar cupom</Button>} />
+        )
       ) : (
         <div className="tabela-wrap">
           <table className="tabela">
@@ -108,10 +112,9 @@ export function OrgCuponsPage() {
               </Select>
               <Input type="number" label="Valor" value={editar.valor ?? 0} onChange={(e) => setEditar({ ...editar, valor: Number(e.target.value) })} />
               <Input type="number" label="Quantidade máxima" value={editar.quantidadeMaxima ?? 0} onChange={(e) => setEditar({ ...editar, quantidadeMaxima: Number(e.target.value) })} />
-              <Input type="date" label="Validade" value={(editar.validade ?? '').slice(0, 10)} onChange={(e) => setEditar({ ...editar, validade: `${e.target.value}T23:59:59` })} />
+              <Input type="date" label="Validade" value={(editar.validade ?? '').slice(0, 10)} onChange={(e) => setEditar({ ...editar, validade: toISOWithOffset(`${e.target.value}T23:59:59`) })} />
             </div>
-            <Select label="Evento" value={editar.eventoId ?? ''} onChange={(e) => setEditar({ ...editar, eventoId: e.target.value ? Number(e.target.value) : undefined })}>
-              <option value="">Todos os eventos</option>
+            <Select label="Evento" value={editar.eventoId ?? ''} onChange={(e) => setEditar({ ...editar, eventoId: Number(e.target.value) })}>
               {eventosPagos.map((e) => <option key={e.id} value={e.id}>{e.titulo}</option>)}
             </Select>
             <Switch checked={editar.ativo ?? true} onChange={(v) => setEditar({ ...editar, ativo: v })} label="Cupom ativo" />

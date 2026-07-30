@@ -36,7 +36,9 @@ interface FormState {
   numero: string;
   bairro: string;
   cidade: string;
+  estado: string;
   cep: string;
+  complemento: string;
   capacidade: number;
   categoriaIds: number[];
   tagIds: number[];
@@ -59,7 +61,9 @@ const vazio = (organizadorId: number, uniId: number, campusId: number): FormStat
   numero: '',
   bairro: '',
   cidade: '',
+  estado: 'SP',
   cep: '',
+  complemento: '',
   capacidade: 100,
   categoriaIds: [],
   tagIds: [],
@@ -109,6 +113,9 @@ export function OrgEventoFormPage() {
       if (!form.dataFim) e.dataFim = 'Informe a data de término.';
       if (form.dataInicio && form.dataFim && form.dataFim < form.dataInicio) e.dataFim = 'O término deve ser após o início.';
       if (!form.local.trim()) e.local = 'Informe o local.';
+      if (!form.logradouro.trim()) e.logradouro = 'Informe o logradouro.';
+      if (!form.cidade.trim()) e.cidade = 'Informe a cidade.';
+      if (!form.cep.trim()) e.cep = 'Informe o CEP.';
     }
     setErros(e);
     return Object.keys(e).length === 0;
@@ -141,8 +148,9 @@ export function OrgEventoFormPage() {
       numero: form.numero,
       bairro: form.bairro,
       cidade: form.cidade,
-      estado: 'SP',
+      estado: form.estado,
       cep: form.cep,
+      complemento: form.complemento || undefined,
     },
   });
 
@@ -208,10 +216,13 @@ export function OrgEventoFormPage() {
             </div>
             <Input label="Nome do local" obrigatorio value={form.local} onChange={(e) => set('local', e.target.value)} erro={erros.local} placeholder="Ex.: Auditório Central" />
             <div className="form-grid">
-              <Input label="Logradouro" value={form.logradouro} onChange={(e) => set('logradouro', e.target.value)} />
+              <Input label="Logradouro" obrigatorio value={form.logradouro} onChange={(e) => set('logradouro', e.target.value)} erro={erros.logradouro} />
               <Input label="Número" value={form.numero} onChange={(e) => set('numero', e.target.value)} />
               <Input label="Bairro" value={form.bairro} onChange={(e) => set('bairro', e.target.value)} />
-              <Input label="CEP" value={form.cep} onChange={(e) => set('cep', e.target.value)} />
+              <Input label="Cidade" obrigatorio value={form.cidade} onChange={(e) => set('cidade', e.target.value)} erro={erros.cidade} placeholder="Ex.: São José do Rio Preto" />
+              <Input label="Estado" value={form.estado} onChange={(e) => set('estado', e.target.value.toUpperCase())} placeholder="UF" style={{ maxWidth: 100 }} />
+              <Input label="CEP" obrigatorio value={form.cep} onChange={(e) => set('cep', e.target.value)} erro={erros.cep} />
+              <Input label="Complemento" value={form.complemento} onChange={(e) => set('complemento', e.target.value)} />
               <Input className="col-span" type="number" label="Capacidade" value={form.capacidade} onChange={(e) => set('capacidade', Number(e.target.value))} />
             </div>
           </div>
@@ -370,7 +381,9 @@ function fromEvento(ev: Evento): FormState {
     numero: ev.endereco.numero,
     bairro: ev.endereco.bairro,
     cidade: ev.endereco.cidade,
+    estado: ev.endereco.estado,
     cep: ev.endereco.cep,
+    complemento: ev.endereco.complemento ?? '',
     capacidade: ev.capacidade,
     categoriaIds: ev.categoriaIds,
     tagIds: ev.tagIds,

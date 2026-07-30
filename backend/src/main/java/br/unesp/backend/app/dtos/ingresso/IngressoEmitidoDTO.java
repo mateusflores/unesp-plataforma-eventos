@@ -1,6 +1,7 @@
 package br.unesp.backend.app.dtos.ingresso;
 
 import br.unesp.backend.app.dtos.checkin.CheckInDTO;
+import br.unesp.backend.infra.config.DateUtils;
 import br.unesp.backend.model.entities.ingressos.IngressoEmitido;
 
 public record IngressoEmitidoDTO(
@@ -27,7 +28,7 @@ public record IngressoEmitidoDTO(
                 ingresso.getLoteNome(),
                 ingresso.getCodigoQR(),
                 ingresso.getStatusIngresso().name(),
-                ingresso.getDataEmissao() != null ? ingresso.getDataEmissao().toString() : null,
+                ingresso.getDataEmissao() != null ? DateUtils.formatZonedDateTime(ingresso.getDataEmissao()) : null,
                 ingresso.getCheckIn() != null ? CheckInDTO.fromEntity(ingresso.getCheckIn()) : null
         );
     }

@@ -1,6 +1,7 @@
 package br.unesp.backend.app.dtos.compra;
 
 import br.unesp.backend.app.dtos.pagamento.PagamentoDTO;
+import br.unesp.backend.infra.config.DateUtils;
 import br.unesp.backend.model.entities.ingressos.Venda;
 
 import java.math.BigDecimal;
@@ -23,7 +24,7 @@ public record CompraDTO(
                 venda.getId(),
                 venda.getUsuario().getId(),
                 venda.getEvento().getId(),
-                venda.getData() != null ? venda.getData().toString() : null,
+                venda.getData() != null ? DateUtils.formatZonedDateTime(venda.getData()) : null,
                 venda.getItemVendaList() != null ?
                         venda.getItemVendaList().stream().map(ItemCompraDTO::fromEntity).toList() : List.of(),
                 venda.getCupomDesconto() != null ? venda.getCupomDesconto().getId() : null,

@@ -1,5 +1,6 @@
 package br.unesp.backend.app.dtos.pagamento;
 
+import br.unesp.backend.infra.config.DateUtils;
 import br.unesp.backend.model.entities.ingressos.Pagamento;
 import br.unesp.backend.model.enums.MetodoPagamento;
 
@@ -15,7 +16,7 @@ public record PagamentoDTO(
                 pagamento.getId(),
                 mapMetodoParaFront(pagamento.getMetodoPagamento()),
                 pagamento.getStatusPagamento().name(),
-                pagamento.getDataPagamento() != null ? pagamento.getDataPagamento().toString() : null,
+                pagamento.getDataPagamento() != null ? DateUtils.formatZonedDateTime(pagamento.getDataPagamento()) : null,
                 pagamento.getValorPagamento()
         );
     }

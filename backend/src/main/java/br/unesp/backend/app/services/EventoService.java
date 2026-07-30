@@ -4,6 +4,7 @@ import br.unesp.backend.app.dtos.evento.EventoDTO;
 import br.unesp.backend.app.dtos.evento.EventoRequest;
 import br.unesp.backend.app.dtos.ingresso.IngressoRequest;
 import br.unesp.backend.app.dtos.ingresso.LoteRequest;
+import br.unesp.backend.infra.config.DateUtils;
 import br.unesp.backend.model.entities.*;
 import br.unesp.backend.model.enums.StatusEvento;
 import br.unesp.backend.model.enums.UnidadeFederativa;
@@ -222,7 +223,7 @@ public class EventoService {
         if (request.publico() != null) evento.setPublico(request.publico());
         if (request.dataInicio() != null) {
             try {
-                evento.setDataInicio(ZonedDateTime.parse(request.dataInicio()));
+                evento.setDataInicio(DateUtils.parseZonedDateTime(request.dataInicio()));
             } catch (DateTimeException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Formato de data inválido para dataInicio: " + request.dataInicio());
@@ -230,7 +231,7 @@ public class EventoService {
         }
         if (request.dataFim() != null) {
             try {
-                evento.setDataFim(ZonedDateTime.parse(request.dataFim()));
+                evento.setDataFim(DateUtils.parseZonedDateTime(request.dataFim()));
             } catch (DateTimeException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Formato de data inválido para dataFim: " + request.dataFim());
@@ -299,14 +300,14 @@ public class EventoService {
                     lote.setQuantidadeDisponivel(lr.quantidadeDisponivel() != null ?
                             lr.quantidadeDisponivel() : lote.getQuantidadeTotal());
                     if (lr.dataInicio() != null) {
-                        try { lote.setDataInicio(ZonedDateTime.parse(lr.dataInicio())); }
+                        try { lote.setDataInicio(DateUtils.parseZonedDateTime(lr.dataInicio())); }
                         catch (DateTimeException e) {
                             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                                     "Formato de data inválido para lote: " + lr.dataInicio());
                         }
                     }
                     if (lr.dataFim() != null) {
-                        try { lote.setDataFim(ZonedDateTime.parse(lr.dataFim())); }
+                        try { lote.setDataFim(DateUtils.parseZonedDateTime(lr.dataFim())); }
                         catch (DateTimeException e) {
                             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                                     "Formato de data inválido para lote: " + lr.dataFim());

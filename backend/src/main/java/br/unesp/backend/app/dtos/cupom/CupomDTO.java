@@ -1,5 +1,6 @@
 package br.unesp.backend.app.dtos.cupom;
 
+import br.unesp.backend.infra.config.DateUtils;
 import br.unesp.backend.model.entities.ingressos.CupomDesconto;
 
 import java.math.BigDecimal;
@@ -22,7 +23,7 @@ public record CupomDTO(
                 cupom.getCodigo(),
                 cupom.getTipoDesconto().name(),
                 cupom.getValor(),
-                cupom.getValidade() != null ? cupom.getValidade().toString() : null,
+                cupom.getValidade() != null ? DateUtils.formatZonedDateTime(cupom.getValidade()) : null,
                 cupom.getQuantidadeMaxima(),
                 cupom.getQuantidadeUsada(),
                 cupom.getAtivo()

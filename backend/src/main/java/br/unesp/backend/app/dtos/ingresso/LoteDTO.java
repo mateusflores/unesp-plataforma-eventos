@@ -1,5 +1,6 @@
 package br.unesp.backend.app.dtos.ingresso;
 
+import br.unesp.backend.infra.config.DateUtils;
 import br.unesp.backend.model.entities.Lote;
 
 import java.math.BigDecimal;
@@ -22,8 +23,8 @@ public record LoteDTO(
                 lote.getPreco(),
                 lote.getQuantidadeTotal(),
                 lote.getQuantidadeDisponivel(),
-                lote.getDataInicio() != null ? lote.getDataInicio().toString() : null,
-                lote.getDataFim() != null ? lote.getDataFim().toString() : null
+                lote.getDataInicio() != null ? DateUtils.formatZonedDateTime(lote.getDataInicio()) : null,
+                lote.getDataFim() != null ? DateUtils.formatZonedDateTime(lote.getDataFim()) : null
         );
     }
 }

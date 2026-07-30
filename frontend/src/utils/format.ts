@@ -7,7 +7,10 @@ const meses = [
 ];
 const mesesCurto = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 
-export const parseData = (iso: string): Date => new Date(iso);
+export const parseData = (iso: string): Date => {
+  const cleaned = iso.replace(/\[.*\]$/, '');
+  return new Date(cleaned);
+};
 
 export const moeda = (valor: number): string =>
   valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -55,6 +58,25 @@ export const iniciais = (nome: string): string =>
     .slice(0, 2)
     .map((p) => p[0]?.toUpperCase())
     .join('');
+
+/**
+ * Converte datetime local para ISO 8601 com offset do navegador.
+ * Ex: "2026-07-13T09:00" -> "2026-07-13T09:00:00-03:00"
+ */
+export const toISOWithOffset = (localDateTime: string): string => {
+  if (!localDateTime) return '';
+  if (/[+\-]\d{2}:\d{2}$/.test(localDateTime) || localDateTime.endsWith('Z')) return localDateTime;
+  const offset = -new Date().getTimezoneOffset();
+  const sign = offset >= 0 ? '+' : '-';
+  const pad = (n: number) => String(Math.floor(n)).padStart(2, '0');
+  const absOffset = Math.abs(offset);
+  const tz = `${sign}${pad(absOffset / 60)}:${pad(absOffset % 60)}`;
+  const parts = localDateTime.split('T');
+  if (parts.length === 2 && parts[1].split(':').length === 2) {
+    return `${localDateTime}:00${tz}`;
+  }
+  return `${localDateTime}${tz}`;
+};
 
 export const meMes = meses;
 export const nomeMesAno = (d: Date): string => `${meses[d.getMonth()]} de ${d.getFullYear()}`;
