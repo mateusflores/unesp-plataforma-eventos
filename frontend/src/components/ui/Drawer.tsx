@@ -27,21 +27,7 @@ export function Drawer({ aberto, onFechar, titulo, lado = 'right', children, foo
   if (!aberto) return null;
 
   return createPortal(
-<<<<<<< HEAD
-    <>
-      <div className="drawer-overlay" onClick={onFechar} />
-      <aside className={`drawer drawer--${lado}`} role="dialog" aria-modal="true" aria-label={titulo}>
-        <div className="drawer__header">
-          <h2 style={{ fontSize: 'var(--fs-lg)' }}>{titulo}</h2>
-          <button className="modal__close" onClick={onFechar} aria-label="Fechar">
-            <X size={20} />
-          </button>
-        </div>
-        <div className="drawer__body">{children}</div>
-        {footer && <div className="drawer__footer">{footer}</div>}
-      </aside>
-    </>,
-=======
+
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-slate-950/50 backdrop-blur-sm" onClick={onFechar} />
       <aside
@@ -64,7 +50,6 @@ export function Drawer({ aberto, onFechar, titulo, lado = 'right', children, foo
         {footer && <div className="border-t border-slate-200 px-6 py-4 dark:border-slate-800">{footer}</div>}
       </aside>
     </div>,
->>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
     document.body,
   );
 }

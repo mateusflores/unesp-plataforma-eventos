@@ -5,41 +5,7 @@ import { DemoResetButton } from './DemoResetButton';
 
 export function Footer() {
   return (
-<<<<<<< HEAD
-    <footer className="footer">
-      <div className="container footer__inner">
-        <div className="footer__brand">
-          <Logo />
-          <p>A agenda universitária que reúne tudo o que acontece no seu campus em um só calendário.</p>
-          <div className="footer__social">
-            <a href="#" aria-label="Instagram"><Instagram size={18} /></a>
-            <a href="#" aria-label="GitHub"><Github size={18} /></a>
-            <a href="#" aria-label="LinkedIn"><Linkedin size={18} /></a>
-          </div>
-        </div>
-        <div className="footer__cols">
-          <div>
-            <h4>Descobrir</h4>
-            <Link to="/calendario">Calendário</Link>
-            <Link to="/explorar">Explorar eventos</Link>
-            <Link to="/organizadores">Organizadores</Link>
-          </div>
-          <div>
-            <h4>Minha conta</h4>
-            <Link to="/minha-agenda">Minha agenda</Link>
-            <Link to="/meus-ingressos">Meus ingressos</Link>
-            <Link to="/perfil">Perfil</Link>
-          </div>
-          <div>
-            <h4>Organize</h4>
-            <Link to="/organizador">Painel</Link>
-            <Link to="/organizador/eventos/novo">Criar evento</Link>
-            <Link to="/organizador/checkin">Check-in</Link>
-          </div>
-        </div>
-      </div>
-      <div className="container footer__bottom">
-=======
+
     <footer className="border-t border-slate-200 bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
       <div className="container flex flex-col gap-10 py-10 lg:flex-row lg:justify-between">
         <div className="max-w-md space-y-4">
@@ -87,7 +53,6 @@ export function Footer() {
         </div>
       </div>
       <div className="container flex flex-col gap-3 border-t border-slate-200 py-4 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400 sm:flex-row sm:items-center sm:justify-between">
->>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
         <span>© 2026 Ágora · Projeto acadêmico — front-end com dados simulados.</span>
         <DemoResetButton />
       </div>

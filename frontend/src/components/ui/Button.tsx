@@ -26,26 +26,7 @@ export function Button({
   disabled,
   ...rest
 }: ButtonProps) {
-<<<<<<< HEAD
-  const classes = [
-    'btn',
-    `btn--${variante}`,
-    tamanho !== 'md' && `btn--${tamanho}`,
-    bloco && 'btn--block',
-    apenasIcone && 'btn--icon',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
 
-  return (
-    <button className={classes} disabled={disabled || carregando} {...rest}>
-      {carregando ? (
-        <span className="spinner" style={{ width: 16, height: 16 }} aria-hidden />
-      ) : (
-        iconeEsq
-      )}
-=======
   const base = 'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60';
   const sizes = {
     sm: 'h-9 px-4 text-sm',
@@ -64,7 +45,6 @@ export function Button({
   return (
     <button className={[base, sizes[tamanho], variants[variante], bloco ? 'w-full' : '', apenasIcone ? 'aspect-square p-0' : '', className].filter(Boolean).join(' ')} disabled={disabled || carregando} {...rest}>
       {carregando ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/70 border-t-transparent" aria-hidden /> : iconeEsq}
->>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
       {!apenasIcone && children}
       {iconeDir}
     </button>

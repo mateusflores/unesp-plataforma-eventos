@@ -5,8 +5,30 @@
  * proposta de mapeamento — quando o back-end existir, basta ajustá-los.
  * Enquanto VITE_USE_MOCKS=true, este arquivo NÃO é utilizado.
  */
-import { http } from './http';
+import { http, setAuthToken } from './http';
 import type { Services } from '@/services/contracts';
+import type { Usuario } from '@/types';
+
+const TOKEN_KEY = 'agora:token';
+
+interface LoginResponse {
+  token: string;
+  usuario: Usuario;
+}
+
+function storeToken(token: string): void {
+  setAuthToken(token);
+  try {
+    localStorage.setItem(TOKEN_KEY, token);
+  } catch {
+    /* noop */
+  }
+}
+
+function unwrapAuth(data: LoginResponse): Usuario {
+  storeToken(data.token);
+  return data.usuario;
+}
 
 const qs = (params: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
@@ -21,9 +43,18 @@ const qs = (params: Record<string, unknown>): string => {
 
 export const apiServices: Services = {
   auth: {
-    login: (email, senha) => http.post('/auth/login', { email, senha }),
-    loginDemo: (usuarioId) => http.post('/auth/demo', { usuarioId }),
-    registrar: (dados) => http.post('/auth/registrar', dados),
+    login: async (email, senha) => {
+      const data = await http.post<LoginResponse>('/auth/login', { email, senha });
+      return unwrapAuth(data);
+    },
+    loginDemo: async (usuarioId) => {
+      const data = await http.post<LoginResponse>('/auth/demo', { usuarioId });
+      return unwrapAuth(data);
+    },
+    registrar: async (dados) => {
+      const data = await http.post<LoginResponse>('/auth/registrar', dados);
+      return unwrapAuth(data);
+    },
     recuperarSenha: (email) => http.post('/auth/recuperar-senha', { email }),
     me: (usuarioId) => http.get(`/usuarios/${usuarioId}`),
   },

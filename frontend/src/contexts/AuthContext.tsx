@@ -2,6 +2,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from 'react';
 import type { Usuario, TipoUsuario } from '@/types';
 import { services } from '@/services';
+import { setAuthToken } from '@/services/api/http';
+
+const TOKEN_KEY = 'agora:token';
 
 interface AuthContextValue {
   usuario: Usuario | null;
@@ -22,11 +25,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [carregando, setCarregando] = useState(true);
 
-  // Restaura a sessão simulada.
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setUsuario(JSON.parse(raw));
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (token) setAuthToken(token);
     } catch {
       /* noop */
     }
@@ -70,7 +74,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [persistir],
   );
 
-  const logout = useCallback(() => persistir(null), [persistir]);
+  const logout = useCallback(() => {
+    persistir(null);
+    setAuthToken(null);
+    try {
+      localStorage.removeItem(TOKEN_KEY);
+    } catch {
+      /* noop */
+    }
+  }, [persistir]);
 
   const atualizarUsuario = useCallback(
     (patch: Partial<Usuario>) => {

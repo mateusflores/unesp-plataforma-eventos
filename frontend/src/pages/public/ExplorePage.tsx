@@ -52,11 +52,8 @@ export function ExplorePage() {
       {estado === 'error' ? (
         <ErrorState status={statusHttp} mensagem={erro} onRetry={recarregar} />
       ) : estado === 'loading' ? (
-<<<<<<< HEAD
-        <div className="eventos-grid">
-=======
+
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
->>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
           {Array.from({ length: 6 }).map((_, i) => <EventCardSkeleton key={i} />)}
         </div>
       ) : data && data.itens.length === 0 ? (
@@ -67,11 +64,8 @@ export function ExplorePage() {
         />
       ) : (
         <>
-<<<<<<< HEAD
-          <div className="eventos-grid">
-=======
+
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
->>>>>>> 604fa8e (Migração para Tailwind e ajustes de build)
             {data?.itens.map((ev) => <EventCard key={ev.id} evento={ev} />)}
           </div>
           <div className="mt-8">
